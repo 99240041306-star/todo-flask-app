@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Task</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f6f8; padding: 30px; }
+        .container { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,.1); }
+        h1 { text-align: center; }
+        label { font-weight: bold; margin-top: 12px; display: block; }
+        input, textarea, select { box-sizing: border-box; width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; }
+        button { margin-top: 20px; width: 100%; padding: 12px; background: #007bff; color: white; border: 0; border-radius: 5px; font-size: 16px; cursor: pointer; }
+        .back-link { display: block; text-align: center; margin-top: 15px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Edit Task</h1>
+    <form method="post" action="/tasks/{{ task.id }}/edit">
+        <label>Title</label>
+        <input type="text" name="title" value="{{ task.title }}" required>
+
+        <label>Description</label>
+        <textarea name="description">{{ task.description }}</textarea>
+
+        <label>Due Date</label>
+        <input type="date" name="due_date" value="{{ task.due_date }}" required>
+
+        <label>Status</label>
+        <select name="status">
+            <option value="pending" {% if task.status == "pending" %}selected{% endif %}>Pending</option>
+            <option value="completed" {% if task.status == "completed" %}selected{% endif %}>Completed</option>
+        </select>
+
+        <button type="submit">Save Changes</button>
+    </form>
+    <a class="back-link" href="/">← Back to Task List</a>
+</div>
+</body>
+</html>
