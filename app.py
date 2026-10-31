@@ -81,6 +81,30 @@ def add_task_page():
 
 
 # ------------------------
+# HTML FORM ACTION ROUTES
+# ------------------------
+@app.route("/tasks/<int:task_id>/complete", methods=["POST"])
+def complete_task_page(task_id):
+    task = get_task_by_id(task_id, app.config["DB_NAME"])
+    if task:
+        update_task(
+            task_id,
+            task["title"],
+            task["description"],
+            task["due_date"],
+            "completed",
+            app.config["DB_NAME"],
+        )
+    return redirect(url_for("tasks_page"))
+
+
+@app.route("/tasks/<int:task_id>/delete", methods=["POST"])
+def delete_task_page(task_id):
+    delete_task(task_id, app.config["DB_NAME"])
+    return redirect(url_for("tasks_page"))
+
+
+# ------------------------
 # API ROUTES
 # ------------------------
 @app.route("/api/tasks", methods=["POST"])
