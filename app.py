@@ -83,6 +83,34 @@ def add_task_page():
 # ------------------------
 # HTML FORM ACTION ROUTES
 # ------------------------
+@app.route("/tasks/<int:task_id>/edit", methods=["GET", "POST"])
+def edit_task_page(task_id):
+    task = get_task_by_id(task_id, app.config["DB_NAME"])
+    if not task:
+        return "Task not found", 404
+
+    if request.method == "POST":
+        title = request.form.get("title")
+        description = request.form.get("description", "")
+        due_date = request.form.get("due_date")
+        status = request.form.get("status", "pending")
+
+        if not title or not due_date:
+            return "Title and Due Date are required", 400
+
+        update_task(
+            task_id,
+            title,
+            description,
+            due_date,
+            status,
+            app.config["DB_NAME"],
+        )
+        return redirect(url_for("tasks_page"))
+
+    return render_template("edit_task.html", task=task)
+
+
 @app.route("/tasks/<int:task_id>/complete", methods=["POST"])
 def complete_task_page(task_id):
     task = get_task_by_id(task_id, app.config["DB_NAME"])
