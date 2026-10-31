@@ -105,3 +105,83 @@ def test_delete_task(client):
 
     assert response.status_code == 200
     assert response.json["message"] == "Task deleted"
+
+def test_complete_task_from_web_page(client):
+    client.post(
+        "/api/tasks",
+        json={
+            "title": "Complete Me",
+            "description": "Web action test",
+            "due_date": "2026-12-31",
+            "status": "pending",
+        },
+    )
+
+    response = client.post("/tasks/1/complete", follow_redirects=True)
+
+    assert response.status_code == 200
+    assert b"Completed" in response.data
+
+
+def test_delete_task_from_web_page(client):
+    client.post(
+        "/api/tasks",
+        json={
+            "title": "Delete Me",
+            "description": "Web action test",
+            "due_date": "2026-12-31",
+            "status": "pending",
+        },
+    )
+
+    response = client.post("/tasks/1/delete", follow_redirects=True)
+
+    assert response.status_code == 200
+    assert b"No tasks yet" in response.data
+
+
+def test_edit_task_page_loads_existing_values(client):
+    client.post(
+        "/api/tasks",
+        json={
+            "title": "Original Title",
+            "description": "Original description",
+            "due_date": "2026-12-31",
+            "status": "pending",
+        },
+    )
+
+    response = client.get("/tasks/1/edit")
+
+    assert response.status_code == 200
+    assert b"Original Title" in response.data
+    assert b"Original description" in response.data
+
+
+def test_edit_task_from_web_page(client):
+    client.post(
+        "/api/tasks",
+        json={
+            "title": "Original Title",
+            "description": "Original description",
+            "due_date": "2026-12-31",
+            "status": "pending",
+        },
+    )
+
+    response = client.post(
+        "/tasks/1/edit",
+        data={
+            "title": "Updated Title",
+            "description": "Updated description",
+            "due_date": "2027-01-15",
+            "status": "completed",
+        },
+        follow_redirects=True,
+    )
+
+    assert response.status_code == 200
+    assert b"Updated Title" in response.data
+    assert b"Updated description" in response.data
+    assert b"Completed" in response.data
+
