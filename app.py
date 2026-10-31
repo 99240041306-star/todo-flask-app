@@ -20,6 +20,9 @@ app = Flask(__name__)
 
 app.config["DB_NAME"] = "tasks.db"
 
+# Initialize the database when the app starts (including on Render/Gunicorn).
+init_db(app.config["DB_NAME"])
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
