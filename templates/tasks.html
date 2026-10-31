@@ -146,14 +146,14 @@
             </td>
             <td class="actions">
                 {% if task.status != "completed" %}
-                <form method="post" action="/api/tasks/{{ task.id }}?_method=PUT">
-                    <button class="btn btn-complete" disabled>
+                <form method="post" action="/tasks/{{ task.id }}/complete">
+                    <button type="submit" class="btn btn-complete">
                         Complete
                     </button>
                 </form>
                 {% endif %}
-                <form method="post" action="/api/tasks/{{ task.id }}?_method=DELETE">
-                    <button class="btn btn-delete" disabled>
+                <form method="post" action="/tasks/{{ task.id }}/delete">
+                    <button type="submit" class="btn btn-delete">
                         Delete
                     </button>
                 </form>
